@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import { CardDetails, DeliverAddress } from "../../models/checkout";
+import { PaymentDetails, DeliverAddress } from "../../models/checkout";
 
 export async function selectValidSize(page: Page) {
   const dropdown = page.getByTestId("size-select-button-dropdown");
@@ -89,7 +89,10 @@ export async function fillDeliveryAddress(
   }
 }
 
-export async function fillCardDetails(page: Page, data: Partial<CardDetails>) {
+export async function fillCardDetails(
+  page: Page,
+  data: Partial<PaymentDetails>
+) {
   const { cardNumber, expiryDate, cvv, name, postalCode } = data;
 
   if (cardNumber) {

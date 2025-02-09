@@ -9,7 +9,7 @@ export interface DeliverAddress {
   city: string;
 }
 
-export interface CardDetails {
+export interface PaymentDetails {
   cardNumber: string;
   expiryDate: string;
   cvv: string;

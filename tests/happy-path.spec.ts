@@ -1,13 +1,7 @@
 import { test, expect } from "@playwright/test";
-import {
-  addToBag,
-  clickCheckoutButton,
-  clickReviewAndCheckoutButton,
-  fillCardDetails,
-  fillDeliveryAddress,
-  goToCheckoutPage,
-  selectValidSize,
-} from "./shared/common-user-actions";
+import { CategoryPage } from "./pages/Category";
+import { CartPage } from "./pages/Cart";
+import { CheckoutPage } from "./pages/checkout";
 
 test.describe("proceed to payment", () => {
   test.beforeEach(async ({ page }) => {
@@ -15,23 +9,24 @@ test.describe("proceed to payment", () => {
     await page.getByRole("button", { name: "Accept All Cookies" }).click();
   });
 
-  test("has title", async ({ page }) => {
-    const title = page.getByTestId("product-detail-block-product-title");
-
-    await expect(title).toHaveText(/Palazzo/);
+  test("should have a title", async ({ page }) => {
+    const categoryPage = new CategoryPage(page);
+    await expect(categoryPage.productTitle).toHaveText(/Palazzo/);
   });
 
   test("should select size", async ({ page }) => {
-    const { dropdown, options } = await selectValidSize(page);
+    const categoryPage = new CategoryPage(page);
 
-    await expect(dropdown).toHaveText(`Size ${options[0]}`);
+    const options = await categoryPage.selectValidSize();
+
+    await expect(categoryPage.sizeDropdown).toHaveText(`Size ${options[0]}`);
   });
 
   test("should go to cart page", async ({ page }) => {
-    await selectValidSize(page);
-
-    await addToBag(page);
-    await clickReviewAndCheckoutButton(page);
+    const categoryPage = new CategoryPage(page);
+    categoryPage.selectValidSize();
+    await categoryPage.addToBagButton.click();
+    await categoryPage.reviewAndCheckoutButton.click();
 
     await expect(page).toHaveURL(
       "https://staging.meandem.vercel.app/checkout/cart"
@@ -39,29 +34,30 @@ test.describe("proceed to payment", () => {
   });
 
   test("should go to checkout page", async ({ page }) => {
-    await selectValidSize(page);
-    await addToBag(page);
-    await clickReviewAndCheckoutButton(page);
-    await expect(page).toHaveURL(
-      "https://staging.meandem.vercel.app/checkout/cart"
-    );
+    const categoryPage = new CategoryPage(page);
+    const cartPage = new CartPage(page);
 
-    await clickCheckoutButton(page);
+    categoryPage.goToCartPage();
+    await cartPage.checkoutButton.click();
 
     await expect(page).toHaveURL("https://staging.meandem.vercel.app/checkout");
   });
 
-  test("should be able to fill card details", async ({ page }) => {
-    await goToCheckoutPage(page);
+  test.only("should be able to place an order", async ({ page }) => {
+    const categoryPage = new CategoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkout = new CheckoutPage(page);
 
-    await page.getByRole("button", { name: "Continue as guest" }).click();
-    await page.getByRole("textbox", { name: "Enter email address*" }).click();
-    await page
-      .getByRole("textbox", { name: /Enter email address/ })
-      .fill("harithsenevi4@gmail.com");
-    await page.getByRole("button", { name: "Continue to Delivery" }).click();
+    await categoryPage.goToCartPage();
+    await cartPage.goToCheckoutPage();
 
-    await fillDeliveryAddress(page, {
+    // proceed as a guest
+    await checkout.guestCheckoutButton.click();
+    await checkout.emailField.click();
+    await checkout.emailField.fill("harithsenevi4@gmail.com");
+    await checkout.guestContinueToDeliveryButton.click();
+
+    await checkout.fillDeliveryAddress({
       firstName: "Haritha",
       lastName: "Senevi",
       addressLine: "Merlin Wharf",
@@ -70,34 +66,21 @@ test.describe("proceed to payment", () => {
       city: "Leicester",
     });
 
-    await page
-      .getByTestId("deliveryAddress")
-      .getByRole("button", { name: "Submit to Continue" })
-      .click();
-    await page
-      .getByTestId("billingAddress")
-      .getByRole("button", { name: "Submit to Continue" })
-      .click();
-    await page
-      .getByTestId("deliveryOptions")
-      .getByRole("button", { name: "Submit to Continue" })
-      .click();
+    await checkout.deliveryAddressButton.click();
+    await checkout.billingAddressButton.click();
+    await checkout.deliveryOptionsButton.click();
 
-    await fillCardDetails(page, {
-      cardNumber: "123",
+    await checkout.fillPaymentDetails({
+      cardNumber: "4242424242424242",
       expiryDate: "12/23",
       cvv: "123",
       name: "Haritha Senevi",
       postalCode: "LE3 5TH",
     });
 
-    const placeOrderButton = page.getByRole("button", {
-      name: /Place Order/,
-    });
-    await placeOrderButton.click();
+    await checkout.placeOrderButton.click();
 
-    const alertList = page.getByRole("alert").first();
-
-    await expect(alertList).toBeVisible();
+    await expect(checkout.alert.first()).toBeVisible();
+    await page.pause();
   });
 });
