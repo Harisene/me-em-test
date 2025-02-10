@@ -73,6 +73,5 @@ test.describe("proceed to payment", () => {
     await expect(
       checkoutPage.alert.filter({ hasText: /Enter a valid/ }).first()
     ).toBeVisible();
-    await page.pause();
   });
 });

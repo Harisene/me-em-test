@@ -15,9 +15,9 @@ export class CategoryPage {
       "product-detail-block-product-title"
     );
     this.sizeDropdown = this.page.getByTestId("size-select-button-dropdown");
-    this.sizeOptions = this.page.locator(
-      '//div[@role="option" and not(@data-disabled="true")]'
-    );
+    this.sizeOptions = this.page
+      .getByTestId("size-select-option-list")
+      .locator('//div[@role="option" and not(@data-disabled="true")]');
     this.addToBagButton = this.page.getByRole("button", { name: "Add to bag" });
     this.reviewAndCheckoutButton = this.page.getByRole("link", {
       name: "Review Bag and Checkout",
@@ -33,7 +33,7 @@ export class CategoryPage {
     await this.sizeDropdown.click();
     const options = await this.sizeOptions.allTextContents();
 
-    await this.sizeOptions.first().waitFor();
+    await this.sizeOptions.first().waitFor({ state: "visible" });
     await this.sizeOptions.first().click();
 
     return options;
