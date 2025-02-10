@@ -38,5 +38,5 @@ npm run test
 * I followed **3A (Arrange, Act, Assert)** practices on each test case.
 * I followed the **Page Object Model** approach with folder structure.
 * I created three test files focusing on the requirements of the assignment. (happy-path.spec.ts, unhappy-path.spec.ts and optional.spec.ts)
-* I mainly run the test cases on the **Chromium** browser.
+* I mainly ran the test cases on the **Chromium** browser.
 
