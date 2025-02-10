@@ -23,7 +23,7 @@ npm install
 Need to provide `BASE_URL` of the website to run tests. Create a `.env` file in the root folder and add the below variable to it.
 
 ```
-BASE_URL=<URL>
+BASE_URL=<URL> // https://yourwebsite.com
 ```
 
 ## Run tests
