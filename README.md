@@ -39,4 +39,9 @@ npm run test
 * I followed the **Page Object Model** approach with folder structure.
 * I created three test files focusing on the requirements of the assignment. (happy-path.spec.ts, unhappy-path.spec.ts and optional.spec.ts)
 * I mainly ran the test cases on the **Chromium** browser.
+* Sometimes a couple of test cases fail for Firefox and Webkit. Chromium passes all the test cases.
+
+## Things could do if have more time
+* Fix tests that fail for Firefox and Webkit but work on Chromium.
+* Write test cases for different view ports.
 
