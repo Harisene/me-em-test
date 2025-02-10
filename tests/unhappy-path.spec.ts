@@ -4,8 +4,8 @@ import { CategoryPage } from "./pages/Category";
 import { CheckoutPage } from "./pages/Checkout";
 
 test.describe("Category screen", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("https://staging.meandem.vercel.app/palazzo-pant-black");
+  test.beforeEach(async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/palazzo-pant-black`);
     await page.getByRole("button", { name: "Accept All Cookies" }).click();
   });
 
@@ -53,8 +53,8 @@ test.describe("Category screen", () => {
 });
 
 test.describe("Cart page", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("https://staging.meandem.vercel.app/palazzo-pant-black");
+  test.beforeEach(async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/palazzo-pant-black`);
     await page.getByRole("button", { name: "Accept All Cookies" }).click();
 
     const categoryPage = new CategoryPage(page);
@@ -77,8 +77,8 @@ test.describe("Cart page", () => {
 });
 
 test.describe("Checkout page", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("https://staging.meandem.vercel.app/palazzo-pant-black");
+  test.beforeEach(async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/palazzo-pant-black`);
     await page.getByRole("button", { name: "Accept All Cookies" }).click();
 
     const categoryPage = new CategoryPage(page);

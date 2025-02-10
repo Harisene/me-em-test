@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 
 export class CartPage {
+  private BASE_URL = process.env.BASE_URL;
   public checkoutButton: Locator;
   public increaseQuantityButton: Locator;
   public grandTotal: Locator;
@@ -17,7 +18,7 @@ export class CartPage {
 
   goToCheckoutPage = async () => {
     await this.checkoutButton.click();
-    this.page.waitForURL("https://staging.meandem.vercel.app/checkout");
+    this.page.waitForURL(`${this.BASE_URL}/checkout`);
   };
 
   getGrandTotal = () => {

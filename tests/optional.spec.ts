@@ -4,8 +4,8 @@ import { CategoryPage } from "./pages/Category";
 import { CheckoutPage } from "./pages/Checkout";
 
 test.describe("Optional task", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("https://staging.meandem.vercel.app/palazzo-pant-black");
+  test.beforeEach(async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/palazzo-pant-black`);
     await page.getByRole("button", { name: "Accept All Cookies" }).click();
 
     const categoryPage = new CategoryPage(page);
@@ -14,21 +14,21 @@ test.describe("Optional task", () => {
     await cartPage.goToCheckoutPage();
   });
 
-  test("guest email request throws 500 status code", async ({ page }) => {
+  test("guest email request throws 500 status code", async ({
+    page,
+    baseURL,
+  }) => {
     // Arrange
     const checkoutPage = new CheckoutPage(page);
     await checkoutPage.guestCheckoutButton.click();
     await checkoutPage.emailField.fill("harithsenevi4@gmail.com");
-    await page.route(
-      "https://staging.meandem.vercel.app/checkout",
-      async (route) => {
-        await route.fulfill({
-          status: 500,
-          contentType: "application/json",
-          body: JSON.stringify({ success: false }),
-        });
-      }
-    );
+    await page.route(`${baseURL}/checkout`, async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ success: false }),
+      });
+    });
 
     // Act
     await checkoutPage.guestContinueToDeliveryButton.click();

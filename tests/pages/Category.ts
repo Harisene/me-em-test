@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 
 export class CategoryPage {
+  private BASE_URL = process.env.BASE_URL;
   public productTitle: Locator;
   public sizeDropdown: Locator;
   public sizeOptions: Locator;
@@ -43,8 +44,6 @@ export class CategoryPage {
     await this.selectValidSize();
     await this.addToBagButton.click();
     await this.reviewAndCheckoutButton.click();
-    return this.page.waitForURL(
-      "https://staging.meandem.vercel.app/checkout/cart"
-    );
+    return this.page.waitForURL(`${this.BASE_URL}/checkout/cart`);
   }
 }

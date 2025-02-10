@@ -4,8 +4,8 @@ import { CartPage } from "./pages/Cart";
 import { CheckoutPage } from "./pages/Checkout";
 
 test.describe("proceed to payment", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("https://staging.meandem.vercel.app/palazzo-pant-black");
+  test.beforeEach(async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/palazzo-pant-black`);
     await page.getByRole("button", { name: "Accept All Cookies" }).click();
   });
 
@@ -28,7 +28,7 @@ test.describe("proceed to payment", () => {
     await expect(categoryPage.sizeDropdown).toHaveText(`Size ${options[0]}`);
   });
 
-  test("should go to cart page", async ({ page }) => {
+  test("should go to cart page", async ({ page, baseURL }) => {
     // Arrange
     const categoryPage = new CategoryPage(page);
 
@@ -38,9 +38,7 @@ test.describe("proceed to payment", () => {
     await categoryPage.reviewAndCheckoutButton.click();
 
     // Assert
-    await expect(page).toHaveURL(
-      "https://staging.meandem.vercel.app/checkout/cart"
-    );
+    await expect(page).toHaveURL(`${baseURL}/checkout/cart`);
   });
 
   test("should be able to place an order", async ({ page }) => {
