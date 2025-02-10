@@ -15,7 +15,7 @@ https://github.com/Harisene/me-em-test.git
 Run the command below to install all the project dependencies.
 
 ```
-npm install or npm run test-chromium
+npm install
 ```
 
 ## Setup environment variables
@@ -26,9 +26,17 @@ Need to provide `BASE_URL` of the website to run tests. Create a `.env` file in 
 BASE_URL=<URL> // https://yourwebsite.com
 ```
 
-## Run tests
+## Run tests on Chromium
 
-Run the below command to execute all the test cases.
+This command will run all the tests on the Chromium browser.
+
+```
+npm run test-chromium
+```
+
+## Run tests on Chromium, Firefox and Webkit
+
+This command will run all the tests on the Chromium, Firefox and Webkit browsers.
 
 ```
 npm run test
