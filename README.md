@@ -20,7 +20,7 @@ npm install
 
 ## Setup environment variables
 
-Need to provide **BASE_URL** of the website to run tests.
+Need to provide `BASE_URL` of the website to run tests. Create a `.env` file in the root folder and add the below variable to it.
 
 ```
 BASE_URL=<URL>
