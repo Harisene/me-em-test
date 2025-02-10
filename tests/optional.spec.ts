@@ -15,9 +15,8 @@ test.describe("Optional task", () => {
   });
 
   test("guest email request throws 500 status code", async ({ page }) => {
+    // Arrange
     const checkoutPage = new CheckoutPage(page);
-    await page.pause();
-
     await checkoutPage.guestCheckoutButton.click();
     await checkoutPage.emailField.fill("harithsenevi4@gmail.com");
     await page.route(
@@ -30,8 +29,11 @@ test.describe("Optional task", () => {
         });
       }
     );
+
+    // Act
     await checkoutPage.guestContinueToDeliveryButton.click();
 
+    // Assert
     await expect(
       checkoutPage.alert.filter({ hasText: /Invalid email/ }).first()
     ).toBeVisible();

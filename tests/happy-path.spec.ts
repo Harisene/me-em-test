@@ -10,37 +10,48 @@ test.describe("proceed to payment", () => {
   });
 
   test("should have a title", async ({ page }) => {
+    // Arrange
     const categoryPage = new CategoryPage(page);
+
+    // Assert
     await expect(categoryPage.productTitle).toHaveText(/Palazzo/);
   });
 
   test("should select size", async ({ page }) => {
+    // Arrange
     const categoryPage = new CategoryPage(page);
 
+    // Act
     const options = await categoryPage.selectValidSize();
 
+    // Assert
     await expect(categoryPage.sizeDropdown).toHaveText(`Size ${options[0]}`);
   });
 
   test("should go to cart page", async ({ page }) => {
+    // Arrange
     const categoryPage = new CategoryPage(page);
+
+    // Act
     await categoryPage.selectValidSize();
     await categoryPage.addToBagButton.click();
     await categoryPage.reviewAndCheckoutButton.click();
 
+    // Assert
     await expect(page).toHaveURL(
       "https://staging.meandem.vercel.app/checkout/cart"
     );
   });
 
   test("should be able to place an order", async ({ page }) => {
+    // Arrange
     const categoryPage = new CategoryPage(page);
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
 
+    // Act
     await categoryPage.goToCartPage();
     await cartPage.goToCheckoutPage();
-
     // proceed as a guest
     await checkoutPage.guestCheckoutButton.click();
     await checkoutPage.emailField.click();
@@ -70,6 +81,7 @@ test.describe("proceed to payment", () => {
 
     await checkoutPage.placeOrderButton.click();
 
+    // Assert
     await expect(
       checkoutPage.alert.filter({ hasText: /Enter a valid/ }).first()
     ).toBeVisible();
