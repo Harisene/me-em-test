@@ -15,7 +15,7 @@ https://github.com/Harisene/me-em-test.git
 Run the command below to install all the project dependencies.
 
 ```
-npm install 
+npm install or npm run test-chromium
 ```
 
 ## Setup environment variables
