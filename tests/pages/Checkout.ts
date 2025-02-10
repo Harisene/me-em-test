@@ -145,4 +145,22 @@ export class CheckoutPage {
       await this.paymentPostalCodeField.fill(postalCode);
     }
   }
+
+  async finishDeliveryAddressStep() {
+    await this.fillDeliveryAddress({
+      firstName: "Haritha",
+      lastName: "Senevi",
+      addressLine: "Merlin Wharf",
+      phoneNumber: "+441234567890",
+      postCode: "LE3 5TH",
+      city: "Leicester",
+    });
+    await this.deliveryAddressButton.click();
+  }
+
+  async proceedAsAGuest() {
+    this.guestCheckoutButton.click();
+    await this.emailField.fill("harithsenevi4@gmail.com");
+    await this.guestContinueToDeliveryButton.click();
+  }
 }

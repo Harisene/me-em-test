@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { CategoryPage } from "./pages/Category";
 import { CartPage } from "./pages/Cart";
-import { CheckoutPage } from "./pages/checkout";
+import { CheckoutPage } from "./pages/Checkout";
 
 test.describe("proceed to payment", () => {
   test.beforeEach(async ({ page }) => {
@@ -24,7 +24,7 @@ test.describe("proceed to payment", () => {
 
   test("should go to cart page", async ({ page }) => {
     const categoryPage = new CategoryPage(page);
-    categoryPage.selectValidSize();
+    await categoryPage.selectValidSize();
     await categoryPage.addToBagButton.click();
     await categoryPage.reviewAndCheckoutButton.click();
 
@@ -33,31 +33,21 @@ test.describe("proceed to payment", () => {
     );
   });
 
-  test("should go to checkout page", async ({ page }) => {
+  test("should be able to place an order", async ({ page }) => {
     const categoryPage = new CategoryPage(page);
     const cartPage = new CartPage(page);
-
-    categoryPage.goToCartPage();
-    await cartPage.checkoutButton.click();
-
-    await expect(page).toHaveURL("https://staging.meandem.vercel.app/checkout");
-  });
-
-  test.only("should be able to place an order", async ({ page }) => {
-    const categoryPage = new CategoryPage(page);
-    const cartPage = new CartPage(page);
-    const checkout = new CheckoutPage(page);
+    const checkoutPage = new CheckoutPage(page);
 
     await categoryPage.goToCartPage();
     await cartPage.goToCheckoutPage();
 
     // proceed as a guest
-    await checkout.guestCheckoutButton.click();
-    await checkout.emailField.click();
-    await checkout.emailField.fill("harithsenevi4@gmail.com");
-    await checkout.guestContinueToDeliveryButton.click();
+    await checkoutPage.guestCheckoutButton.click();
+    await checkoutPage.emailField.click();
+    await checkoutPage.emailField.fill("harithsenevi4@gmail.com");
+    await checkoutPage.guestContinueToDeliveryButton.click();
 
-    await checkout.fillDeliveryAddress({
+    await checkoutPage.fillDeliveryAddress({
       firstName: "Haritha",
       lastName: "Senevi",
       addressLine: "Merlin Wharf",
@@ -66,11 +56,11 @@ test.describe("proceed to payment", () => {
       city: "Leicester",
     });
 
-    await checkout.deliveryAddressButton.click();
-    await checkout.billingAddressButton.click();
-    await checkout.deliveryOptionsButton.click();
+    await checkoutPage.deliveryAddressButton.click();
+    await checkoutPage.billingAddressButton.click();
+    await checkoutPage.deliveryOptionsButton.click();
 
-    await checkout.fillPaymentDetails({
+    await checkoutPage.fillPaymentDetails({
       cardNumber: "4242424242424242",
       expiryDate: "12/23",
       cvv: "123",
@@ -78,9 +68,11 @@ test.describe("proceed to payment", () => {
       postalCode: "LE3 5TH",
     });
 
-    await checkout.placeOrderButton.click();
+    await checkoutPage.placeOrderButton.click();
 
-    await expect(checkout.alert.first()).toBeVisible();
+    await expect(
+      checkoutPage.alert.filter({ hasText: /Enter a valid/ }).first()
+    ).toBeVisible();
     await page.pause();
   });
 });

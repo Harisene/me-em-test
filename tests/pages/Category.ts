@@ -6,6 +6,9 @@ export class CategoryPage {
   public sizeOptions: Locator;
   public addToBagButton: Locator;
   public reviewAndCheckoutButton: Locator;
+  public sizeAlert: Locator;
+  public removeButton: Locator;
+  public shopOurCollectionButton: Locator;
 
   constructor(private page: Page) {
     this.productTitle = this.page.getByTestId(
@@ -18,6 +21,11 @@ export class CategoryPage {
     this.addToBagButton = this.page.getByRole("button", { name: "Add to bag" });
     this.reviewAndCheckoutButton = this.page.getByRole("link", {
       name: "Review Bag and Checkout",
+    });
+    this.sizeAlert = this.page.getByTestId("product-detail-block-invalid-size");
+    this.removeButton = this.page.getByRole("button", { name: /Remove/ });
+    this.shopOurCollectionButton = this.page.getByRole("link", {
+      name: "Shop Our Collection",
     });
   }
 
